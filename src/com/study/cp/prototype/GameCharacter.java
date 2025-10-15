@@ -5,6 +5,7 @@ import java.util.List;
 
 // 1. 实现 Cloneable 接口
 public abstract class GameCharacter implements Cloneable {
+    //应该在子类中初始化
     private String name;
     protected String type;
     // 引用类型，用于演示深拷贝和浅拷贝的区别
