@@ -1,36 +1,150 @@
 package com.study.CP.Singleton;
 
+import java.util.HashMap;
+import java.util.Map;
+
+//单例模式：全局唯一，全局访问，避免重复连接浪费资源
 public class Main {
-
     public static void main(String[] args) {
-        System.out.println("程序启动...");
+        //eh式
+        DatabaseManagerL db1 = DatabaseManagerL.getInstance();
+        DatabaseManagerL db2 = DatabaseManagerL.getInstance();
 
-        // 模块A需要读取配置
-        System.out.println("\n模块 A 开始工作...");
-        //getInstance()的作用就和 new 一个实体对象样
-        ConfigurationManager configManager1 = ConfigurationManager.getInstance();
-        String appName = configManager1.getProperty("app.name");
-        String dbUser = configManager1.getProperty("db.user");
-        System.out.println("模块 A 读取到应用名称: " + appName);
-        System.out.println("模块 A 读取到数据库用户: " + dbUser);
+        db1.execute("SELECT * FROM users");
+        db2.execute("SELECT * FROM customers");
 
-        // 模块B也需要读取配置
-        System.out.println("\n模块 B 开始工作...");
-        ConfigurationManager configManager2 = ConfigurationManager.getInstance();
-        String appVersion = configManager2.getProperty("app.version");
-        System.out.println("模块 B 读取到应用版本: " + appVersion);
-
-        // 验证两个模块获取的是否是同一个实例
-        System.out.println("\n--- 验证实例唯一性 ---");
-        System.out.println("configManager1 的哈希码: " + configManager1.hashCode());
-        System.out.println("configManager2 的哈希码: " + configManager2.hashCode());
-
-        //使用 hashCode() 作为一个直观的观察指标是非常好的，但用于程序逻辑判断时，应该始终使用 == 运算符来验证两个引用是否指向同一个实例
-        if (configManager1 == configManager2) {
-            System.out.println("结论：两个管理者是同一个实例，单例模式工作正常！");
-        } else {
-            System.out.println("错误：创建了多个实例，单例模式实现失败！");
-        }
+        System.out.println("Same Instance: " + (db1 == db2));
     }
 }
+
+/**
+ * 饿汉式，用static final创建全局唯一实例
+ */
+class DatabaseManagerE {
+    private static final DatabaseManagerE INSTANCE = new DatabaseManagerE();
+    private String connectionInfo;
+
+    //私有构造，外部代码无法创建实例
+    private DatabaseManagerE() {
+        this.connectionInfo = "mysql://localhost:3306/myDataBaseE";
+        System.out.println("Connection established: " + connectionInfo);
+    }
+
+    //提供全局访问点，static避免要先创建类，这违反了单例模式
+    public static DatabaseManagerE getInstance() {
+        return INSTANCE;
+    }
+
+    //业务代码
+    public void execute(String sql) {
+        System.out.println("Executing " + sql);
+    }
+}
+
+/**
+ * 懒汉式，懒启动，第一次用时才创建实例，但是要加锁避免同时创建两个
+ */
+class DatabaseManagerL {
+    private static volatile DatabaseManagerL instance;
+    private String connectionInfo;
+
+    private DatabaseManagerL() {
+        this.connectionInfo = "mysql://localhost:3306/myDataBaseL";
+        System.out.println("Connection established: " + connectionInfo);
+    }
+
+    public static DatabaseManagerL getInstance() {
+        //双重检查
+        /*
+线程 A 进入同步代码块，锁住 Database.class。
+线程 B 也运行到这里，但发现锁被占用，只能等待。
+线程 A 创建对象并退出代码块，同时释放锁。
+线程 B 获得锁并进入。
+线程 B 再次检查 instance == null，发现对象已经创建，因此不会重复创建。
+         */
+        if (instance == null) {
+            synchronized (DatabaseManagerL.class) {
+                if (instance == null) {
+                    instance = new DatabaseManagerL();
+                }
+            }
+        }
+        return instance;
+    }
+
+    //业务代码
+    public void execute(String sql) {
+        System.out.println("Executing " + sql);
+    }
+}
+
+/**
+ * 练习
+ */
+class ConfigManagerE {
+    private static final ConfigManagerE INSTANCE = new ConfigManagerE();
+    private Map<String, String> configInfo;
+
+    private ConfigManagerE() {
+        configInfo = new HashMap<>();
+        System.out.println("ConfigManager");
+    }
+
+    public static ConfigManagerE getInstance() {
+        return INSTANCE;
+    }
+
+    //业务方法
+    public void setConfigInfo(String key, String value) {
+        configInfo.put(key, value);
+    }
+
+    public String getConfig(String key) {
+        return configInfo.getOrDefault(key, null);
+    }
+}
+
+class ConfigManagerL {
+    private static ConfigManagerL instance = null;
+    private Map<String, String> configInfo;
+
+    private ConfigManagerL() {
+        System.out.println("ConfigManager");
+        configInfo = new HashMap<>();
+    }
+
+    public static ConfigManagerL getInstance() {
+        if (instance == null) {
+            synchronized (ConfigManagerL.class) {
+                if (instance == null) {
+                    instance = new ConfigManagerL();
+                }
+            }
+        }
+        return instance;
+    }
+
+    public void setConfig(String key, String value){
+        configInfo.put(key,value);
+    }
+
+    public String getConfig(String key){
+        return configInfo.getOrDefault(key,null);
+    }
+
+    // 重置单例实例（仅用于测试）
+    public static void resetInstance() {
+        instance = null;
+    }
+}
+
+
+
+
+
+
+
+
+
+
 
