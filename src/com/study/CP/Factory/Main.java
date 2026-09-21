@@ -1,11 +1,10 @@
 package com.study.CP.Factory;
 
-import com.study.CP.Factory.factory.CreditCardGatewayFactory;
-import com.study.CP.Factory.factory.PayPalGatewayFactory;
-import com.study.CP.Factory.factory.PaymentGatewayFactory;
+import com.study.CP.Factory.factory.*;
 
 public class Main {
-    public static void main(String[] args) {
+    // 工厂模式示例1:支付方式
+/*    public static void main(String[] args) {
         // 模拟从配置文件或用户选择中获取支付方式
         String paymentMethod = "PayPal"; // 可以改成 "CreditCard" 试试
 
@@ -24,5 +23,15 @@ public class Main {
         //调用父类的方法
         factory.executePayment(199.99);
         factory.changePayment();
+    }*/
+    // 工厂模式示例2:日志记录器
+    public static void main(String[] args) {
+        System.out.println("Development Application");
+        Application devApp = new DevelopmentApplication();
+        devApp.doSomething();
+
+        System.out.println("Testing Application");
+        Application testApp = new TestingApplication();
+        testApp.doSomething();
     }
 }
