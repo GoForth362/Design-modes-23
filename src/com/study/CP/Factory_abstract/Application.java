@@ -7,7 +7,7 @@ import com.study.CP.Factory_abstract.product.File;
 
 //10. 客户端
 // 客户端类
-public class  Application {
+public class Application {
     private Button button;
     private Checkbox checkbox;
     private File file;
