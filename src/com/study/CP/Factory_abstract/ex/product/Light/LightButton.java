@@ -12,4 +12,7 @@ public class LightButton extends Button {
     public String render() {
         return "Render light button with text " + text;
     }
+
+
+
 }

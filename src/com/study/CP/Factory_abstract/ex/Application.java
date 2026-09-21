@@ -17,8 +17,8 @@ public class Application {
 
     public void render() {
         System.out.println("当前主题: " + theme);
-        System.out.println(button.render());
-        System.out.println(checkbox.render());
+        System.out.println(button.render() + "  [theme=" + button.getTheme() + "]");
+        System.out.println(checkbox.render() + "  [theme=" + checkbox.getTheme() + "]");
     }
 
     public static void main(String[] args) {
