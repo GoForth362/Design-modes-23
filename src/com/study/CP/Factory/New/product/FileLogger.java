@@ -1,4 +1,4 @@
-package com.study.CP.Factory.product;
+package com.study.CP.Factory.New.product;
 
 public class FileLogger implements ILogger {
     private final String filePath;

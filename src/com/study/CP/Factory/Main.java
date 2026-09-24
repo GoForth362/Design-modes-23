@@ -1,6 +1,8 @@
 package com.study.CP.Factory;
 
-import com.study.CP.Factory.factory.*;
+import com.study.CP.Factory.New.factory.Application;
+import com.study.CP.Factory.New.factory.DevelopmentApplication;
+import com.study.CP.Factory.New.factory.TestingApplication;
 
 public class Main {
     // 工厂模式示例1:支付方式
