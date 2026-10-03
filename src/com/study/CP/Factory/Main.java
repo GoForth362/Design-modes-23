@@ -2,6 +2,7 @@ package com.study.CP.Factory;
 
 import com.study.CP.Factory.New.factory.Application;
 import com.study.CP.Factory.New.factory.DevelopmentApplication;
+import com.study.CP.Factory.New.factory.ProductionApplication;
 import com.study.CP.Factory.New.factory.TestingApplication;
 
 public class Main {
@@ -31,6 +32,10 @@ public class Main {
         System.out.println("Development Application");
         Application devApp = new DevelopmentApplication();
         devApp.doSomething();
+
+        System.out.println("Production Application");
+        Application prodApp = new ProductionApplication();
+        prodApp.doSomething();
 
         System.out.println("Testing Application");
         Application testApp = new TestingApplication();
