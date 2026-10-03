@@ -4,7 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class PrototypeManager {
-    private Map<String, Cloneable<?>> prototypes = new HashMap<>();
+    private final Map<String, Cloneable<?>> prototypes = new HashMap<>();
     public void registerPrototype(String name, Cloneable<?> prototype) {
         prototypes.put(name, prototype);
     }

@@ -24,8 +24,8 @@ public class Admin implements Cloneable<Admin> {
         return permissions;
     }
 
-    public void setPermissions(List<String> permissions) {
-        this.permissions = permissions;
+    public void setPermissions(String permission) {
+        this.permissions.add(permission);
     }
 
     //深拷贝
